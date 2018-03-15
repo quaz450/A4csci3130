@@ -1,19 +1,26 @@
 {
   "rules": {
-    ".read": "true",
-    ".write": "true",
-    "businesses": {
-            "$business": {
-                "businessID": {
-
-                },
-                "name": {
-                    ".validate": "newData.isString() && newData.val().length > 2 && newData.val().length <48"
-                },
-                "address": {
-                    ".validate": "newData.isString() && newData.val().lenght < 50"
-                }
-            }
-        }
+      ".read": "true",
+      ".write": "true",
+      "businesses": {
+          "$business": {
+              ".validate": "newData.hasChildren(['businessID','name', 'primaryBusiness'])",
+              "businessID": {
+                  ".validate": "newData.isString() && newData.val().matches(/[0-9]{9}/)"
+              },
+              "name": {
+                  ".validate": "newData.isString() && newData.val().length > 2 && newData.val().length <48"
+              },
+              "primaryBusiness": {
+                  ".validate": "newData.isString() && (newData.val()=='Fisher' || newData.val()=='Distributor' || newData.val()=='Processor' || newData.val()=='Fish Monger' )"
+              },
+              "address": {
+                  ".validate": "newData.isString() && newData.val().length < 50"
+              },
+              "province": {
+                  ".validate": "newData.isString() && (newData.val()=='AB' || newData.val()=='BC' || newData.val()=='MB' || newData.val()=='NB' || newData.val()=='NL' || newData.val()=='NS' || newData.val()=='NT' || newData.val()=='NU' || newData.val()=='ON' || newData.val()=='PE' || newData.val()=='QC' || newData.val()=='SK' || newData.val()=='YT' || newData.val()=='')"
+              }
+          }
+      }
   }
 }

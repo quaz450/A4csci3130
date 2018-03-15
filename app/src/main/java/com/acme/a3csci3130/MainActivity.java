@@ -14,7 +14,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends Activity {
 
 
-    private ListView businessListView;
     private FirebaseListAdapter<Business> firebaseAdapter;
 
     @Override
@@ -30,7 +29,7 @@ public class MainActivity extends Activity {
         appData.firebaseReference = appData.firebaseDBInstance.getReference("businesses");
 
         //Get the reference to the UI contents
-        businessListView = (ListView) findViewById(R.id.listView);
+        ListView businessListView = (ListView) findViewById(R.id.listView);
 
         //Set up the List View
        firebaseAdapter = new FirebaseListAdapter<Business>(this, Business.class,

@@ -1,6 +1,7 @@
 package com.acme.a3csci3130;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,7 @@ public class DetailViewActivity extends Activity {
 
     private EditText nameField, addressField;
     private Spinner provinceField, businessField;
+    private MyApplicationData appState;
     ArrayAdapter<CharSequence> provinceAdapter, businessAdapter;
 
     Business receivedBusinessInfo;
@@ -22,6 +24,9 @@ public class DetailViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
         receivedBusinessInfo = (Business)getIntent().getSerializableExtra("Business");
+
+        appState = ((MyApplicationData) getApplicationContext());
+
 
         nameField = (EditText) findViewById(R.id.name);
         addressField = (EditText) findViewById(R.id.address);
@@ -47,15 +52,29 @@ public class DetailViewActivity extends Activity {
         }
     }
 
-    public void updateContact(View v){
-        receivedBusinessInfo.name = nameField.getText().toString();
-        receivedBusinessInfo.address = addressField.getText().toString();
-        receivedBusinessInfo.province = provinceField.getSelectedItem().toString();
-        receivedBusinessInfo.primaryBusiness = businessField.getSelectedItem().toString();
+    public void updateBusiness(View v){
+        String name = nameField.getText().toString();
+        String address = addressField.getText().toString();
+        String province = provinceField.getSelectedItem().toString();
+        String primaryBusiness = businessField.getSelectedItem().toString();
+
+        appState.firebaseReference.child(receivedBusinessInfo.businessID)
+                .child("name").setValue(name);
+        appState.firebaseReference.child(receivedBusinessInfo.businessID)
+                .child("address").setValue(address);
+        appState.firebaseReference.child(receivedBusinessInfo.businessID)
+                .child("province").setValue(province);
+        appState.firebaseReference.child(receivedBusinessInfo.businessID)
+                .child("primaryBusiness").setValue(primaryBusiness);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
-    public void eraseContact(View v)
-    {
-        //TODO: Erase contact functionality
+    public void eraseBusiness(View v) {
+        appState.firebaseReference.child(receivedBusinessInfo.businessID).removeValue();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
